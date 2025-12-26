@@ -13,6 +13,7 @@
 - ✅ Validation dữ liệu
 - ✅ Xử lý lỗi tập trung
 - ✅ CORS hỗ trợ
+- ✅ Rate limiting để bảo vệ API
 
 ## Công nghệ sử dụng
 
@@ -207,6 +208,10 @@ BaiTapLonBackEnd/
 - Middleware bảo vệ các routes yêu cầu đăng nhập
 - Validation dữ liệu đầu vào
 - Xử lý lỗi tập trung
+- Rate limiting để ngăn chặn tấn công brute force:
+  - Authentication routes: 5 requests mỗi 15 phút
+  - API routes: 100 requests mỗi 15 phút
+- Email validation an toàn, không bị ReDoS attack
 
 ## Scripts
 
