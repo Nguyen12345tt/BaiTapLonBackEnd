@@ -12,11 +12,11 @@ const { apiLimiter } = require('../middleware/rateLimiter');
 
 router.route('/')
   .get(apiLimiter, getProducts)
-  .post(protect, apiLimiter, createProduct);
+  .post(apiLimiter, protect, createProduct);
 
 router.route('/:id')
   .get(apiLimiter, getProduct)
-  .put(protect, apiLimiter, updateProduct)
-  .delete(protect, apiLimiter, deleteProduct);
+  .put(apiLimiter, protect, updateProduct)
+  .delete(apiLimiter, protect, deleteProduct);
 
 module.exports = router;
