@@ -1,0 +1,166 @@
+﻿@using PhanMemCamDo.Models.Enums
+@model IEnumerable<PhanMemCamDo.Models.Entities.PawnContract>
+
+@{
+    ViewData["Title"] = "Danh Sách Hợp Đồng";
+}
+
+<div class="container-fluid mt-4">
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card text-white bg-primary shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-1 small opacity-75">💰 Vốn Đang Cho Vay</h6>
+                            <h4 class="fw-bold mb-0">@String.Format("{0:0,0}", ViewBag.VonDangVay) đ</h4>
+                        </div>
+                        <i class="fa-solid fa-sack-dollar fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-success shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-1 small opacity-75">📄 Đang Hoạt Động</h6>
+                            <h4 class="fw-bold mb-0">@ViewBag.DangChay <small class="fs-6 fw-normal">hồ sơ</small></h4>
+                        </div>
+                        <i class="fa-solid fa-file-contract fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-danger shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-1 small opacity-75">⚠️ Sắp Đến Hạn (3 ngày)</h6>
+                            <h4 class="fw-bold mb-0">@ViewBag.SapDenHan <small class="fs-6 fw-normal">hồ sơ</small></h4>
+                        </div>
+                        <i class="fa-solid fa-bell fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-white bg-info shadow-sm h-100 border-0">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-1 small opacity-75">📈 Lãi Dự Kiến (1 tháng)</h6>
+                            <h4 class="fw-bold mb-0">@String.Format("{0:0,0}", ViewBag.LaiDuKien) đ</h4>
+                        </div>
+                        <i class="fa-solid fa-chart-line fa-2x opacity-50"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="text-primary fw-bold mb-0"><i class="fa-solid fa-list"></i> Quản Lý Hợp Đồng</h4>
+
+        <div class="d-flex gap-2">
+            <form asp-action="Index" method="get" class="d-flex">
+                <div class="input-group">
+                    <input type="text" name="searchString" class="form-control" placeholder="Tìm tên khách, mã HĐ..." value="@Context.Request.Query["searchString"]">
+                    <button class="btn btn-outline-primary" type="submit"><i class="fa-solid fa-search"></i></button>
+                </div>
+            </form>
+
+            <a asp-action="Create" class="btn btn-success fw-bold shadow-sm">
+                <i class="fa-solid fa-plus"></i> Tạo Mới
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-secondary text-uppercase small fw-bold">
+                        <tr>
+                            <th class="ps-3">Mã HĐ</th>
+                            <th>Khách Hàng</th>
+                            <th>Tài Sản</th>
+                            <th class="text-end">Tiền Cầm</th>
+                            <th>Ngày Cầm</th>
+                            <th>Ngày Hết Hạn</th>
+                            <th class="text-center">Trạng Thái</th>
+                            <th class="text-center">Tác Vụ</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-3 fw-bold text-primary">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+                                        @item.ContractCode
+                                    </a>
+                                </td>
+                                <td>
+                                    <div class="fw-bold">@item.Customer?.FullName</div>
+                                    <small class="text-muted">@item.Customer?.PhoneNumber</small>
+                                </td>
+                                <td>@item.Asset?.AssetName</td>
+                                <td class="text-end fw-bold text-danger">
+                                    @String.Format("{0:0,0}", item.PawnAmount)
+                                </td>
+                                <td>@item.StartDate.ToString("dd/MM/yyyy")</td>
+
+                                @{
+                                    var isNear = item.Status == ContractStatus.Active && item.EndDate <= DateTime.Now.AddDays(3);
+                                    var isOver = item.Status == ContractStatus.Active && item.EndDate < DateTime.Now;
+                                }
+                                <td class="@(isOver ? "text-danger fw-bold" : (isNear ? "text-warning fw-bold" : ""))">
+                                    @item.EndDate.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td class="text-center">
+                                    @if (item.Status == ContractStatus.Active)
+                                    {
+                                        <span class="badge bg-success bg-opacity-75">Đang Hoạt Động</span>
+                                    }
+                                    else if (item.Status == ContractStatus.Redeemed)
+                                    {
+                                        <span class="badge bg-secondary">Đã Chuộc</span>
+                                    }
+                                    else if (item.Status == ContractStatus.Overdue)
+                                    {
+                                        <span class="badge bg-warning text-dark">Quá Hạn</span>
+                                    }
+                                    else if (item.Status == ContractStatus.Liquidated)
+                                    {
+                                        <span class="badge bg-dark">Đã Thanh Lý</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-light text-primary" title="Sửa">
+                                        <i class="fa-solid fa-pen"></i>
+                                    </a>
+
+                                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-light text-danger ms-1" title="Xóa">
+                                        <i class="fa-solid fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5 text-muted">Không tìm thấy hợp đồng nào.</div>
+            }
+        </div>
+    </div>
+</div>

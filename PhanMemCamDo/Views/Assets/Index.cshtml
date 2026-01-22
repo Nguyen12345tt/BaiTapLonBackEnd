@@ -1,0 +1,151 @@
+﻿@model IEnumerable<PhanMemCamDo.Models.Entities.Asset>
+
+@{
+    ViewData["Title"] = "Kho Tài Sản";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary fw-bold"><i class="fa-solid fa-boxes-stacked"></i> Kho Tài Sản</h3>
+
+        <div class="d-flex gap-2">
+            <form asp-action="Index" method="get" class="d-flex shadow-sm rounded">
+                <input type="text" name="searchString" class="form-control border-end-0 rounded-start"
+                       placeholder="Tìm tên tài sản..." value="@Context.Request.Query["searchString"]" />
+                <button type="submit" class="btn btn-outline-primary border-start-0 rounded-end">
+                    <i class="fa-solid fa-search"></i>
+                </button>
+            </form>
+
+            <a asp-controller="PawnContracts" asp-action="Create" class="btn btn-primary fw-bold shadow-sm">
+                <i class="fa-solid fa-plus"></i> Cầm Đồ Mới
+            </a>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light text-secondary small fw-bold text-uppercase">
+                        <tr>
+                            <th class="ps-4 py-3">Tên Tài Sản</th>
+                            <th class="py-3">Mô Tả / Tình Trạng</th>
+                            <th class="text-center py-3" style="width: 150px;">Chức Năng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="ps-4 fw-bold text-primary">
+                                    <a asp-action="Details" asp-route-id="@item.Id" class="text-decoration-none">
+                                        @item.AssetName
+                                    </a>
+                                </td>
+                                <td class="text-muted small fst-italic">
+                                    @(string.IsNullOrEmpty(item.Description) ? "Không có mô tả" : item.Description)
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group shadow-sm" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning" title="Sửa thông tin">
+                                            <i class="fa-solid fa-pen"></i>
+                                        </a>
+
+                                        <form asp-action="Delete" asp-route-id="@item.Id" method="post"
+                                              id="deleteForm-@item.Id" style="display:none;">
+                                            @Html.AntiForgeryToken()
+                                        </form>
+
+                                        <button type="button" class="btn btn-sm btn-outline-danger" title="Xóa tài sản"
+                                                onclick="confirmDelete(@item.Id, '@item.AssetName')">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center py-5 text-muted bg-light bg-opacity-50">
+                    <i class="fa-solid fa-box-open fa-3x mb-3 text-secondary opacity-50"></i>
+                    <p class="mb-0">Chưa có tài sản nào trong kho.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@@section Scripts {
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+@{
+    // 👇 TÁCH BIẾN Ở ĐÂY: Chuyển dữ liệu sang JSON trước
+    // Dùng Html.Raw để đảm bảo trình biên dịch không báo lỗi cú pháp
+    var jsonError = Html.Raw(Json.Serialize(TempData["ErrorMessage"]));
+    var jsonSuccess = Html.Raw(Json.Serialize(TempData["SuccessMessage"]));
+}
+
+<script>
+    // 1. Hàm hiển thị popup xác nhận xóa (Giữ nguyên)
+    function confirmDelete(id, name) {
+        Swal.fire({
+            title: 'CẢNH BÁO XÓA!',
+            html: "Bạn có chắc muốn xóa tài sản <b>" + name + "</b> không?<br><small class='text-danger'>Hành động này không thể hoàn tác!</small>",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#dc3545',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fa-solid fa-trash"></i> Xóa ngay',
+            cancelButtonText: 'Hủy bỏ',
+            reverseButtons: true,
+            focusCancel: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Đang xử lý...',
+                    text: 'Vui lòng chờ trong giây lát',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+                document.getElementById('deleteForm-' + id).submit();
+            }
+        })
+    }
+
+    // 2. PHẦN HIỂN THỊ THÔNG BÁO (Đã sửa lỗi Expression expected)
+    document.addEventListener('DOMContentLoaded', function() {
+
+        // Lấy giá trị từ biến C# đã tạo ở trên
+        var jsonError = Html.Raw(Json.Serialize(TempData["ErrorMessage"]));
+        var jsonSuccess = Html.Raw(Json.Serialize(TempData["SuccessMessage"]));
+
+        // Kiểm tra và hiện thông báo
+        if (errorMessage) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Xóa Thất Bại!',
+                html: errorMessage,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Đã Hiểu'
+            });
+        }
+
+        if (successMessage) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Thành Công!',
+                text: successMessage,
+                timer: 2000,
+                showConfirmButton: false
+            });
+        }
+    });
+</script>
+}
