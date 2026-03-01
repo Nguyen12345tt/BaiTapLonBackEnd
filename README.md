@@ -57,16 +57,5 @@ Em đã áp dụng kiến thức **ASP.NET Core MVC** để xử lý các nghi�
 * **Frontend:** Bootstrap 5, JavaScript (ES6), jQuery.
 * **Thư viện:** SweetAlert2, FontAwesome.
 
----
-
-## 4. Hình Ảnh Demo
-
-*(Em xin đính kèm một số hình ảnh chức năng chính)*
-
-* **Dashboard & Thông báo tự động:** [Ảnh Dashboard]
-* **Form Thu tiền & Gia hạn hợp đồng:** [Ảnh Form Thu Tiền]
-* **Chức năng chặn xóa tài sản (SweetAlert):** [Ảnh Báo Lỗi]
-
----
 
 **Em xin cảm ơn Thầy/Cô đã xem xét!**
