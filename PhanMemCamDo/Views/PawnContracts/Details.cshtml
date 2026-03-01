@@ -1,0 +1,49 @@
+﻿@model PhanMemCamDo.Models.Entities.PawnContract
+
+@{
+    ViewData["Title"] = "Chi Tiết Hợp Đồng";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h3 class="mb-0">📄 Chi Tiết Hợp Đồng: @Model.ContractCode</h3>
+            <span class="badge bg-light text-dark fs-6">@Model.Status</span>
+        </div>
+        <div class="card-body">
+            <dl class="row fs-5">
+                <dt class="col-sm-3 text-muted">Khách Hàng:</dt>
+                <dd class="col-sm-9 fw-bold">@Model.Customer?.FullName</dd>
+
+                <dt class="col-sm-3 text-muted">CCCD/CMND:</dt>
+                <dd class="col-sm-9">@Model.Customer?.IdentityCard</dd>
+            </dl>
+            <hr class="my-2">
+            <dl class="row fs-5">
+                <dt class="col-sm-3 text-muted">Tài Sản:</dt>
+                <dd class="col-sm-9 fw-bold">@Model.Asset?.AssetName</dd>
+
+                <dt class="col-sm-3 text-muted">Mô Tả:</dt>
+                <dd class="col-sm-9">@Model.Asset?.Description</dd>
+            </dl>
+            <hr class="my-2">
+            <dl class="row fs-5">
+                <dt class="col-sm-3 text-muted">Số Tiền Cầm:</dt>
+                <dd class="col-sm-9 text-danger fw-bold display-6">@Model.PawnAmount.ToString("N0") đ</dd>
+
+                <dt class="col-sm-3 text-muted">Lãi Suất:</dt>
+                <dd class="col-sm-9">@Model.InterestRate % / tháng</dd>
+
+                <dt class="col-sm-3 text-muted">Thời Gian:</dt>
+                <dd class="col-sm-9">
+                    Từ <b>@Model.StartDate.ToString("dd/MM/yyyy")</b>
+                    đến <b>@Model.EndDate.ToString("dd/MM/yyyy")</b>
+                </dd>
+            </dl>
+        </div>
+        <div class="card-footer text-center bg-white py-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2"><i class="fa-solid fa-pen"></i> Sửa Hợp Đồng</a>
+            <a asp-action="Index" class="btn btn-secondary">Quay Lại Danh Sách</a>
+        </div>
+    </div>
+</div>
