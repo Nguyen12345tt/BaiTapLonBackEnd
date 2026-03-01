@@ -14,9 +14,9 @@
 
 | STT | Họ và Tên | Mã SV | Nhiệm Vụ Chính |
 |:---:|:---|:---:|:---|
-| 1 | **Nguyễn Thành Nguyên**  | ... | Thiết kế DB, Module Hợp Đồng, Thu tiền |
-| 2 | **Đỗ Văn Vinh** ⭐️| ... | Module Tài Sản, Giao diện (Frontend) |
-| 3 | **Nguyễn Hồng Sơn** | ... | Module Sổ Quỹ, Thông báo, Báo cáo |
+| 1 | **Nguyễn Thành Nguyên**  | 1871020437 | Thiết kế DB, Module Hợp Đồng, Thu tiền |
+| 2 | **Đỗ Văn Vinh** ⭐️| 1871020660 | Module Tài Sản, Giao diện (Frontend) |
+| 3 | **Nguyễn Hồng Sơn** | 1871020509 | Module Sổ Quỹ, Thông báo, Báo cáo |
 
 ---
 
