@@ -18,8 +18,6 @@
 ---
 
 ## 1. Giới Thiệu Đề Tài
-... (Các phần sau giữ nguyên như cũ)
-## 1. Giới Thiệu Đề Tài
 
 **PhanMemCamDo** là hệ thống quản lý nghiệp vụ cầm đồ, được xây dựng nhằm số hóa quy trình quản lý hồ sơ, tài sản và dòng tiền. Đồ án tập trung giải quyết các bài toán thực tế như tính lãi suất tự động, kiểm soát nợ xấu và ràng buộc toàn vẹn dữ liệu kho hàng.
 
