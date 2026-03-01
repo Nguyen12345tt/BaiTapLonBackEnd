@@ -26,7 +26,7 @@
 
 ---
 
-## . Các Chức Năng Đã Hoàn Thiện
+## 2. Các Chức Năng Đã Hoàn Thiện
 
 Em đã áp dụng kiến thức **ASP.NET Core MVC** để xử lý các nghiệp vụ sau:
 
