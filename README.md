@@ -1,12 +1,12 @@
 # BÁO CÁO BÀI TẬP LỚN: XÂY DỰNG WEBSITE QUẢN LÝ CẦM ĐỒ
 
-> **Môn học:** [Thiết kế, lập trình Back-end]
+> **Môn học:** Thiết kế, lập trình Back-end
 
-> **Giảng viên hướng dẫn:** [Thầy Tạ Chí Hiếu]
+> **Giảng viên hướng dẫn:** Thầy Tạ Chí Hiếu
 
-> **Nhóm thực hiện:** [Nhóm 13]
+> **Nhóm thực hiện:** Nhóm 13
 
-> **Lớp:** [CNTT 18-09]
+> **Lớp:** CNTT 18-09
 
 ---
 
@@ -14,9 +14,9 @@
 
 | STT | Họ và Tên | Mã SV | Nhiệm Vụ Chính |
 |:---:|:---|:---:|:---|
-| 1 | **[Nguyễn Thành Nguyên]**  | ... | Thiết kế DB, Module Hợp Đồng, Thu tiền |
-| 2 | **[Đỗ Văn Vinh]** ⭐️| ... | Module Tài Sản, Giao diện (Frontend) |
-| 3 | **[Nguyễn Hồng Sơn]** | ... | Module Sổ Quỹ, Thông báo, Báo cáo |
+| 1 | **Nguyễn Thành Nguyên**  | ... | Thiết kế DB, Module Hợp Đồng, Thu tiền |
+| 2 | **Đỗ Văn Vinh** ⭐️| ... | Module Tài Sản, Giao diện (Frontend) |
+| 3 | **Nguyễn Hồng Sơn** | ... | Module Sổ Quỹ, Thông báo, Báo cáo |
 
 ---
 
