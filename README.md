@@ -58,4 +58,4 @@ Em đã áp dụng kiến thức **ASP.NET Core MVC** để xử lý các nghi�
 * **Thư viện:** SweetAlert2, FontAwesome.
 
 
-**Em xin cảm ơn Thầy/Cô đã xem xét!**
+**Chúng em xin cảm ơn Thầy đã xem xét và nhận xét giúp chúng em để sau này chúng em sẽ làm tốt hơn!**
