@@ -16,10 +16,15 @@ namespace PhanMemCamDo.Models.ViewModels
 
         public string ?Email { get; set; }
 
+        [Required(ErrorMessage = "Vui lòng nhập số điện thoại")]
+        public string ?PhoneNumber { get; set; }
+
         [Required(ErrorMessage = "Phải nhập lại mật khẩu")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Mật khẩu nhập lại không khớp")] // Tự động so sánh
-        
+
         public string ?ConfirmPassword { get; set; }
+
+
     }
 }
