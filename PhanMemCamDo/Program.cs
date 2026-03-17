@@ -19,6 +19,10 @@ builder.Services.AddHttpContextAccessor();
 // Thêm Controllers và Views
 builder.Services.AddControllersWithViews();
 
+// Thêm swagger để test API
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 // Kết nối SQL Server
 builder.Services.AddDbContext<PawnShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -31,6 +35,11 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
+}
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PhanMemCamDo API v1"));
 }
 
 app.UseHttpsRedirection();
