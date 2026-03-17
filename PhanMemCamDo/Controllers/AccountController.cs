@@ -37,6 +37,9 @@ namespace PhanMemCamDo.Controllers
                     Username = model.Username,
                     FullName = model.FullName,
                     Password = model.Password,
+                    Email = model.Email,
+                    PhoneNumber = model.PhoneNumber,
+
                     // MÃ HÓA MẬT KHẨU (An toàn tuyệt đối)
                     //PasswordHash = HashPassword(model.Password ?? ""),
                     Role = Models.Enums.UserRole.Staff, // Mặc định đăng ký mới là Nhân viên
