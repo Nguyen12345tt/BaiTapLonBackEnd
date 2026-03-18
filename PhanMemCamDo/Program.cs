@@ -27,6 +27,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PawnShopDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Thêm dịch vụ tính lãi cầm đồ
+builder.Services.AddScoped<PhanMemCamDo.Services.PawnCalculator>();
+
 var app = builder.Build();
 
 // --- 2. CẤU HÌNH PIPELINE (MIDDLEWARE) ---
