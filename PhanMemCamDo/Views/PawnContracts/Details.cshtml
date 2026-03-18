@@ -40,6 +40,24 @@
                     đến <b>@Model.EndDate.ToString("dd/MM/yyyy")</b>
                 </dd>
             </dl>
+
+            <hr class="my-3 border-danger border-2 opacity-50">
+            <dl class="row fs-5 mb-0">
+                <dt class="col-sm-3 text-danger fw-bold align-self-center mt-2">Tổng Phải Trả:</dt>
+                <dd class="col-sm-9 text-danger fw-bold display-5 mb-0 mt-2">
+                    @if (ViewBag.TongTienPhaiTra != null)
+                    {
+                        @(((decimal)ViewBag.TongTienPhaiTra).ToString("N0")) <text> đ</text>
+                    }
+                    else
+                    {
+                        <span class="fs-4 text-warning">Đang cập nhật...</span>
+                    }
+                    <div class="fs-6 text-muted fw-normal mt-1">
+                        <i>(Bao gồm Gốc + Lãi + Phạt tính đến ngày hôm nay: @DateTime.Now.ToString("dd/MM/yyyy"))</i>
+                    </div>
+                </dd>
+            </dl>
         </div>
         <div class="card-footer text-center bg-white py-3">
             <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2"><i class="fa-solid fa-pen"></i> Sửa Hợp Đồng</a>

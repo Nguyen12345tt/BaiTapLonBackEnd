@@ -3,45 +3,48 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PhanMemCamDo.Data;
 using PhanMemCamDo.Models.Entities;
+using PhanMemCamDo.Services;
 using PhanMemCamDo.Models.Enums;
 
 namespace PhanMemCamDo.Controllers
 {
-    public class PawnContractsController(PawnShopDbContext context) : Controller
+    public class PawnContractsController : Controller
     {
+        private readonly PawnShopDbContext context;
+        // 1. THÊM MỚI: Khai báo biến để chứa cái máy tính tiền
+        private readonly PawnCalculator _pawnCalculator;
+
+        // 2. SỬA ĐỔI: Nhận cái máy tính tiền (PawnCalculator) từ hệ thống truyền vào
+        public PawnContractsController(PawnShopDbContext context, PawnCalculator pawnCalculator)
+        {
+            this.context = context;
+            _pawnCalculator = pawnCalculator;
+        }
+
         // 1. DANH SÁCH HỢP ĐỒNG (INDEX)
         public async Task<IActionResult> Index(string? searchString)
         {
-            // 1. Tạo câu truy vấn (Chưa chạy xuống Database ngay)
             var contracts = context.PawnContracts
                 .Include(p => p.Asset)
-                    .ThenInclude(a => a!.AssetCategory) // Load danh mục
+                    .ThenInclude(a => a!.AssetCategory)
                 .Include(p => p.Customer)
                 .AsQueryable();
 
-            // 2. Lọc tìm kiếm
             if (!string.IsNullOrEmpty(searchString))
             {
-                // Thêm (searchString ?? "") để chắc chắn không bị Null
                 contracts = contracts.Where(s =>
                     (s.ContractCode != null && s.ContractCode.Contains(searchString ?? "")) ||
                     (s.Customer != null && s.Customer.FullName != null && s.Customer.FullName.Contains(searchString ?? ""))
                 );
             }
 
-            // --- 3. TÍNH TOÁN SỐ LIỆU (Dùng Async để không chặn luồng) ---
-
-            // Tổng vốn đang vay (Dùng SumAsync)
-            // Lưu ý: PawnAmount là nullable nên phải check null (?? 0)
             ViewBag.VonDangVay = await contracts
                 .Where(c => c.Status == ContractStatus.Active)
                 .SumAsync(c => c.PawnAmount);
 
-            // Số hợp đồng đang chạy (Dùng CountAsync)
             ViewBag.DangChay = await contracts
                 .CountAsync(c => c.Status == ContractStatus.Active);
 
-            // Số hợp đồng sắp đến hạn (3 ngày tới)
             var today = DateTime.Now.Date;
             var threeDaysLater = today.AddDays(3);
             ViewBag.SapDenHan = await contracts
@@ -49,20 +52,18 @@ namespace PhanMemCamDo.Controllers
                                  && c.EndDate >= today
                                  && c.EndDate <= threeDaysLater);
 
-            // Lãi dự kiến (Dùng SumAsync)
             ViewBag.LaiDuKien = await contracts
                 .Where(c => c.Status == ContractStatus.Active)
                 .SumAsync(c => (c.PawnAmount) * (c.InterestRate) / 100);
 
-            // 4. Lấy danh sách hiển thị (Dùng ToListAsync)
             var resultList = await contracts
                 .OrderByDescending(c => c.StartDate)
-                .ToListAsync(); // <--- Đây là chỗ quan trọng để fix lỗi GetAwaiter
+                .ToListAsync();
 
             return View(resultList);
         }
 
-        // 2. XEM CHI TIẾT (DETAILS)
+        // 2. XEM CHI TIẾT (DETAILS) - ĐÃ CẬP NHẬT TÍNH LÃI
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -74,6 +75,14 @@ namespace PhanMemCamDo.Controllers
                 .FirstOrDefaultAsync(m => m.Id == id);
 
             if (pawnContract == null) return NotFound();
+
+            // --- 3. GỌI SERVICE TÍNH TIỀN ---
+            // Tính tổng tiền phải trả (Gốc + Lãi + Phạt) tính đến thời điểm hiện tại (DateTime.Now)
+            decimal tongTien = _pawnCalculator.CalculateTotalPayment(pawnContract, DateTime.Now);
+
+            // Đẩy ra View để hiển thị
+            ViewBag.TongTienPhaiTra = tongTien;
+            // --------------------------------
 
             return View(pawnContract);
         }
